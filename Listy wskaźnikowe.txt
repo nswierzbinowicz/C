@@ -1,0 +1,532 @@
+/*
+Struktura elementu listy
+*/
+typedef struct element {
+    int i;
+    struct element *next;
+} element;
+
+/*
+Utwórz listę bez głowy
+*/
+element* utworz() {
+    return NULL;
+}
+
+/*
+Utwórz listę z głową
+*/
+element* utworz_z_glowa() {
+    element* glowa = malloc(sizeof(element));
+    if (!glowa) exit(1);
+    glowa->next = NULL;
+    return glowa;
+}
+
+/*
+Zadanie 7.3.1
+Utwórz pustą listę bez głowy.
+*/
+element* zad_7_3_1() {
+    return utworz();
+}
+
+/*
+Zadanie 7.3.2
+Usuń wszystkie elementy listy bez głowy.
+*/
+void wyczysc(element* Lista) {
+    element* tmp;
+    while (Lista) {
+        tmp = Lista;
+        Lista = Lista->next;
+        free(tmp);
+    }
+}
+
+/*
+Zadanie 7.3.3
+Dodaj element na początek listy bez głowy.
+*/
+element* dodaj(element* Lista, int a) {
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    nowy->next = Lista;
+    return nowy;
+}
+
+/*
+Zadanie 7.3.4
+Dodaj element na koniec listy bez głowy.
+*/
+element* dodajk(element* Lista, int a) {
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    nowy->next = NULL;
+    if (!Lista) return nowy;
+    element* p = Lista;
+    while (p->next) p = p->next;
+    p->next = nowy;
+    return Lista;
+}
+
+/*
+Zadanie 7.3.5
+Dodaj element po wskazanym elemencie w liście bez głowy.
+*/
+element* dodajw(element* Lista, element* elem, int a) {
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    if (!elem) {
+        nowy->next = Lista;
+        return nowy;
+    }
+    nowy->next = elem->next;
+    elem->next = nowy;
+    return Lista;
+}
+
+/*
+Zadanie 7.3.6
+Znajdź element o podanej wartości.
+*/
+element* znajdz(element* Lista, int a) {
+    while (Lista) {
+        if (Lista->i == a) return Lista;
+        Lista = Lista->next;
+    }
+    return NULL;
+}
+
+/*
+Zadanie 7.3.7
+Usuń pierwszy napotkany element o zadanej wartości.
+*/
+element* usun(element* Lista, int a) {
+    element *prev = NULL, *cur = Lista;
+    while (cur && cur->i != a) {
+        prev = cur;
+        cur = cur->next;
+    }
+    if (!cur) return Lista;
+    if (!prev) {
+        element* tmp = cur->next;
+        free(cur);
+        return tmp;
+    } else {
+        prev->next = cur->next;
+        free(cur);
+        return Lista;
+    }
+}
+
+/*
+Zadanie 7.3.8
+Usuń wskazany element z listy.
+*/
+element* usunw(element* Lista, element* elem) {
+    if (!elem) return Lista;
+    if (elem == Lista) {
+        element* tmp = Lista->next;
+        free(elem);
+        return tmp;
+    }
+    element* prev = Lista;
+    while (prev && prev->next != elem) prev = prev->next;
+    if (prev) {
+        prev->next = elem->next;
+        free(elem);
+    }
+    return Lista;
+}
+
+/*
+Zadanie 7.3.9
+Usuń element po wskazanym elemencie.
+*/
+element* usunw2(element* Lista, element* elem) {
+    if (!elem) {
+        if (Lista) {
+            element* tmp = Lista->next;
+            free(Lista);
+            return tmp;
+        }
+        return NULL;
+    }
+    if (elem->next) {
+        element* tmp = elem->next;
+        elem->next = tmp->next;
+        free(tmp);
+    }
+    return Lista;
+}
+/*
+Zadanie 7.3.10
+Utwórz pustą listę z głową.
+*/
+element* zad_7_3_10() {
+    return utworz_z_glowa();
+}
+
+/*
+Zadanie 7.3.11
+Dodaj element na początek listy z głową.
+*/
+void dodaj_gl(element* glowa, int a) {
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    nowy->next = glowa->next;
+    glowa->next = nowy;
+}
+
+/*
+Zadanie 7.3.12
+Dodaj element na koniec listy z głową.
+*/
+void dodajk_gl(element* glowa, int a) {
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    nowy->next = NULL;
+    element* p = glowa;
+    while (p->next) p = p->next;
+    p->next = nowy;
+}
+
+/*
+Zadanie 7.3.13
+Dodaj element po wskazanym elemencie w liście z głową.
+*/
+void dodajw_gl(element* elem, int a) {
+    if (!elem) return;
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    nowy->next = elem->next;
+    elem->next = nowy;
+}
+
+/*
+Zadanie 7.3.14
+Znajdź element o zadanej wartości w liście z głową.
+*/
+element* znajdz_gl(element* glowa, int a) {
+    element* p = glowa->next;
+    while (p) {
+        if (p->i == a) return p;
+        p = p->next;
+    }
+    return NULL;
+}
+
+/*
+Zadanie 7.3.15
+Usuń element o zadanej wartości z listy z głową.
+*/
+void usun_gl(element* glowa, int a) {
+    element *p = glowa, *tmp;
+    while (p->next && p->next->i != a) p = p->next;
+    if (p->next) {
+        tmp = p->next;
+        p->next = tmp->next;
+        free(tmp);
+    }
+}
+
+/*
+Zadanie 7.3.16
+Usuń wskazany element z listy z głową.
+*/
+void usunw_gl(element* glowa, element* elem) {
+    element* p = glowa;
+    while (p->next && p->next != elem) p = p->next;
+    if (p->next) {
+        p->next = elem->next;
+        free(elem);
+    }
+}
+
+/*
+Zadanie 7.3.17
+Usuń element po wskazanym elemencie w liście z głową.
+*/
+void usunw2_gl(element* elem) {
+    if (elem && elem->next) {
+        element* tmp = elem->next;
+        elem->next = tmp->next;
+        free(tmp);
+    }
+}
+
+/*
+Zadanie 7.3.18
+Zamień miejscami zawartość dwóch elementów.
+*/
+void zamien_wartosci(element* a, element* b) {
+    if (a && b) {
+        int tmp = a->i;
+        a->i = b->i;
+        b->i = tmp;
+    }
+}
+
+/*
+Zadanie 7.3.19
+Odwroć listę z głową.
+*/
+void odwroc_gl(element* glowa) {
+    element *prev = NULL, *curr = glowa->next, *next = NULL;
+    while (curr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    glowa->next = prev;
+}
+
+/*
+Zadanie 7.3.20
+Zlicz liczbę elementów w liście z głową.
+*/
+int liczba_elementow(element* glowa) {
+    int count = 0;
+    element* p = glowa->next;
+    while (p) {
+        count++;
+        p = p->next;
+    }
+    return count;
+}
+
+/*
+Zadanie 7.3.21
+Zwróć wskaźnik do ostatniego elementu listy z głową.
+*/
+element* ostatni_element(element* glowa) {
+    element* p = glowa->next;
+    if (!p) return NULL;
+    while (p->next) p = p->next;
+    return p;
+}
+
+/*
+Zadanie 7.3.22
+Kopiuj całą listę z głową.
+*/
+element* kopiuj_gl(element* glowa) {
+    element* nowa = utworz_z_glowa();
+    element* q = nowa;
+    element* p = glowa->next;
+    while (p) {
+        element* nowy = malloc(sizeof(element));
+        if (!nowy) exit(1);
+        nowy->i = p->i;
+        nowy->next = NULL;
+        q->next = nowy;
+        q = nowy;
+        p = p->next;
+    }
+    return nowa;
+}
+
+/*
+Zadanie 7.3.23
+Porównaj dwie listy – zwróć 1 jeśli identyczne, 0 jeśli nie.
+*/
+int porownaj_gl(element* g1, element* g2) {
+    element *p1 = g1->next, *p2 = g2->next;
+    while (p1 && p2) {
+        if (p1->i != p2->i) return 0;
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+    return p1 == NULL && p2 == NULL;
+}
+
+/*
+Zadanie 7.3.24
+Posortuj listę z głową rosnąco.
+*/
+void sortuj_gl(element* glowa) {
+    if (!glowa->next) return;
+    int zamiana;
+    do {
+        zamiana = 0;
+        element* p = glowa->next;
+        while (p && p->next) {
+            if (p->i > p->next->i) {
+                int tmp = p->i;
+                p->i = p->next->i;
+                p->next->i = tmp;
+                zamiana = 1;
+            }
+            p = p->next;
+        }
+    } while (zamiana);
+}
+
+/*
+Zadanie 7.3.25
+Połącz dwie listy z głową w jedną.
+*/
+void polacz_gl(element* g1, element* g2) {
+    element* p = g1;
+    while (p->next) p = p->next;
+    p->next = g2->next;
+    free(g2);
+}
+
+/*
+Zadanie 7.3.26
+Usuń duplikaty z listy z głową.
+*/
+void usun_duplikaty_gl(element* glowa) {
+    element *p = glowa->next;
+    while (p) {
+        element *q = p;
+        while (q->next) {
+            if (q->next->i == p->i) {
+                element* tmp = q->next;
+                q->next = tmp->next;
+                free(tmp);
+            } else {
+                q = q->next;
+            }
+        }
+        p = p->next;
+    }
+}
+
+/*
+Zadanie 7.3.27
+Wstaw element zachowując porządek rosnący.
+*/
+void wstaw_posortowany(element* glowa, int a) {
+    element* nowy = malloc(sizeof(element));
+    if (!nowy) exit(1);
+    nowy->i = a;
+    element* p = glowa;
+    while (p->next && p->next->i < a) p = p->next;
+    nowy->next = p->next;
+    p->next = nowy;
+}
+/*
+Zadanie 7.3.28
+Kopiuj elementy parzyste z jednej listy do nowej.
+*/
+element* przepisz_parzyste_gl(element* glowa) {
+    element* nowa = utworz_z_glowa();
+    element* p = glowa->next;
+    element* q = nowa;
+    while (p) {
+        if (p->i % 2 == 0) {
+            element* nowy = malloc(sizeof(element));
+            if (!nowy) exit(1);
+            nowy->i = p->i;
+            nowy->next = NULL;
+            q->next = nowy;
+            q = nowy;
+        }
+        p = p->next;
+    }
+    return nowa;
+}
+
+/*
+Zadanie 7.3.29
+Podziel listę na dwie: z parzystymi i nieparzystymi wartościami.
+*/
+void podziel_gl(element* glowa, element** parzyste, element** nieparzyste) {
+    *parzyste = utworz_z_glowa();
+    *nieparzyste = utworz_z_glowa();
+    element *p = glowa->next, *p1 = *parzyste, *p2 = *nieparzyste;
+    while (p) {
+        element* nowy = malloc(sizeof(element));
+        if (!nowy) exit(1);
+        nowy->i = p->i;
+        nowy->next = NULL;
+        if (p->i % 2 == 0) {
+            p1->next = nowy;
+            p1 = nowy;
+        } else {
+            p2->next = nowy;
+            p2 = nowy;
+        }
+        p = p->next;
+    }
+}
+
+/*
+Zadanie 7.3.30
+Zamień miejscami dwa elementy o zadanych wartościach.
+*/
+void zamien_gl(element* glowa, int a, int b) {
+    if (a == b) return;
+    element *pa = NULL, *pb = NULL, *p = glowa->next;
+    while (p) {
+        if (p->i == a) pa = p;
+        if (p->i == b) pb = p;
+        p = p->next;
+    }
+    if (pa && pb) {
+        int tmp = pa->i;
+        pa->i = pb->i;
+        pb->i = tmp;
+    }
+}
+
+/*
+Zadanie 7.3.31
+Stwórz nową listę, gdzie każdy element to suma elementów z dwóch list.
+*/
+element* suma_list_gl(element* g1, element* g2) {
+    element* nowa = utworz_z_glowa();
+    element *p1 = g1->next, *p2 = g2->next, *p = nowa;
+    while (p1 && p2) {
+        element* nowy = malloc(sizeof(element));
+        if (!nowy) exit(1);
+        nowy->i = p1->i + p2->i;
+        nowy->next = NULL;
+        p->next = nowy;
+        p = nowy;
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+    return nowa;
+}
+
+/*
+Zadanie 7.3.32
+Stwórz nową listę z elementami z pierwszej listy, których nie ma w drugiej.
+*/
+int wystepuje(element* glowa, int val) {
+    element* p = glowa->next;
+    while (p) {
+        if (p->i == val) return 1;
+        p = p->next;
+    }
+    return 0;
+}
+
+element* roznica_list_gl(element* g1, element* g2) {
+    element* nowa = utworz_z_glowa();
+    element* p = g1->next;
+    element* q = nowa;
+    while (p) {
+        if (!wystepuje(g2, p->i)) {
+            element* nowy = malloc(sizeof(element));
+            if (!nowy) exit(1);
+            nowy->i = p->i;
+            nowy->next = NULL;
+            q->next = nowy;
+            q = nowy;
+        }
+        p = p->next;
+    }
+    return nowa;
+}

@@ -1,0 +1,269 @@
+Zad. 8.2.1 – Otwórz plik
+c
+Kopiuj
+Edytuj
+FILE* otworz(const char* sciezka) {
+    return fopen(sciezka, "r");
+}
+
+Zad. 8.2.2 – Wypisz zawartość pliku
+c
+Kopiuj
+Edytuj
+void wypisz(FILE* plik) {
+    char c;
+    while (fscanf(plik, "%c", &c) == 1)
+        printf("%c", c);
+    fclose(plik);
+}
+
+Zad. 8.2.3 – Wypisz zawartość bez białych znaków
+c
+Kopiuj
+Edytuj
+#include <ctype.h>
+
+void wypisz_bez_bialych(const char* sciezka) {
+    FILE* plik = fopen(sciezka, "r");
+    char c;
+    while (fscanf(plik, "%c", &c) == 1)
+        if (!isspace(c)) printf("%c", c);
+    fclose(plik);
+}
+
+Zad. 8.2.4 – Licz wystąpienia znaku
+c
+Kopiuj
+Edytuj
+int licz_znaki(const char* sciezka, char znak) {
+    FILE* plik = fopen(sciezka, "r");
+    char c;
+    int licznik = 0;
+    while (fscanf(plik, "%c", &c) == 1)
+        if (c == znak) licznik++;
+    fclose(plik);
+    return licznik;
+}
+
+Zad. 8.2.5 – Statystyki znaków
+c
+Kopiuj
+Edytuj
+void statystyki(const char* sciezka) {
+    FILE* plik = fopen(sciezka, "r");
+    int znaki[256] = {0};
+    char c;
+    while (fscanf(plik, "%c", &c) == 1)
+        znaki[(unsigned char)c]++;
+    fclose(plik);
+
+    for (int i = 0; i < 256; i++)
+        if (znaki[i] > 0)
+            printf("'%c' : %d razy\n", i, znaki[i]);
+}
+
+Zad. 8.2.6 – Najczęstszy znak
+c
+Kopiuj
+Edytuj
+char najczestszy(const char* sciezka) {
+    FILE* plik = fopen(sciezka, "r");
+    int znaki[256] = {0};
+    char c;
+    while (fscanf(plik, "%c", &c) == 1)
+        znaki[(unsigned char)c]++;
+    fclose(plik);
+
+    int max = 0;
+    char wynik = 0;
+    for (int i = 0; i < 256; i++)
+        if (znaki[i] > max) {
+            max = znaki[i];
+            wynik = i;
+        }
+    return wynik;
+}
+
+Zad. 8.2.7 – Suma liczb z pliku
+c
+Kopiuj
+Edytuj
+int suma(const char* sciezka) {
+    FILE* plik = fopen(sciezka, "r");
+    int liczba, suma = 0;
+    while (fscanf(plik, "%d", &liczba) == 1)
+        suma += liczba;
+    fclose(plik);
+    return suma;
+}
+
+Zad. 8.2.8 – Najmniejsza liczba w pliku
+c
+Kopiuj
+Edytuj
+int min_w_pliku(const char* sciezka) {
+    FILE* plik = fopen(sciezka, "r");
+    int liczba, min;
+    fscanf(plik, "%d", &min);
+    while (fscanf(plik, "%d", &liczba) == 1)
+        if (liczba < min) min = liczba;
+    fclose(plik);
+    return min;
+}
+
+Zad. 8.2.9 – Porównaj zawartość dwóch plików (char)
+c
+Kopiuj
+Edytuj
+int porownaj(const char* p1, const char* p2) {
+    FILE *f1 = fopen(p1, "r");
+    FILE *f2 = fopen(p2, "r");
+    char a, b;
+    while (fscanf(f1, "%c", &a) == 1 && fscanf(f2, "%c", &b) == 1)
+        if (a != b) return 0;
+    if (!feof(f1) || !feof(f2)) return 0;
+    fclose(f1);
+    fclose(f2);
+    return 1;
+}
+
+Zad. 8.2.10 – Porównanie bez białych znaków (char)
+c
+Kopiuj
+Edytuj
+#include <ctype.h>
+
+int porownaj_light(const char* p1, const char* p2) {
+    FILE *f1 = fopen(p1, "r");
+    FILE *f2 = fopen(p2, "r");
+    char a, b;
+    while (1) {
+        while (fscanf(f1, "%c", &a) == 1 && isspace(a));
+        while (fscanf(f2, "%c", &b) == 1 && isspace(b));
+        if (feof(f1) || feof(f2)) break;
+        if (a != b) return 0;
+    }
+    return feof(f1) && feof(f2);
+}
+
+Zad. 8.2.11 – Otwórz plik do dopisywania
+c
+Kopiuj
+Edytuj
+FILE* dopisz(const char* sciezka) {
+    return fopen(sciezka, "a");
+}
+Zad. 8.2.12 – Zapisz n linii tekstu
+c
+Kopiuj
+Edytuj
+void zapisz_linie(FILE* f, int n) {
+    char linia[256];
+    for (int i = 0; i < n; i++) {
+        fgets(linia, sizeof(linia), stdin);
+        fputs(linia, f);
+    }
+    fclose(f);
+}
+
+Zad. 8.2.13 – Przepisz plik do drugiego
+c
+Kopiuj
+Edytuj
+void przepisz(FILE* f1, FILE* f2) {
+    char c;
+    while (fscanf(f1, "%c", &c) == 1)
+        fprintf(f2, "%c", c);
+}
+
+Zad. 8.2.14 – Przepisz binarnie pliki
+c
+Kopiuj
+Edytuj
+void przepisz_bin(const char* p1, const char* p2) {
+    FILE* f1 = fopen(p1, "rb");
+    FILE* f2 = fopen(p2, "wb");
+    char buf[100];
+    int n;
+    while ((n = fread(buf, 1, 100, f1)) > 0)
+        fwrite(buf, 1, n, f2);
+    fclose(f1);
+    fclose(f2);
+}
+
+Zad. 8.2.15 – Dopisz zawartość pliku1 do końca pliku2
+c
+Kopiuj
+Edytuj
+void dopisz_plik(const char* p1, const char* p2) {
+    FILE* f1 = fopen(p1, "r");
+    FILE* f2 = fopen(p2, "a");
+    char c;
+    while (fscanf(f1, "%c", &c) == 1)
+        fprintf(f2, "%c", c);
+    fclose(f1);
+    fclose(f2);
+}
+
+Zad. 8.2.16 – Dopisz tablicę intów do pliku
+c
+Kopiuj
+Edytuj
+void zapisz_tab(const int* tab, int n, const char* plik) {
+    FILE* f = fopen(plik, "a");
+    for (int i = 0; i < n; i++)
+        fprintf(f, "%d\n", tab[i]);
+    fclose(f);
+}
+
+Zad. 8.2.17 – Zapisz tablicę 2D binarnie
+c
+Kopiuj
+Edytuj
+void zapisz2D(const char* plik, int** tab, int n, int m) {
+    FILE* f = fopen(plik, "wb");
+    for (int i = 0; i < n; i++)
+        fwrite(tab[i], sizeof(int), m, f);
+    fclose(f);
+}
+
+Zad. 8.2.18 – Odczytaj tablicę 2D binarnie
+c
+Kopiuj
+Edytuj
+void wczytaj2D(const char* plik, int** tab, int n, int m) {
+    FILE* f = fopen(plik, "rb");
+    for (int i = 0; i < n; i++)
+        fread(tab[i], sizeof(int), m, f);
+    fclose(f);
+}
+
+Zad. 8.2.19 – Zapisz tablicę i wymiary
+c
+Kopiuj
+Edytuj
+void zapisz2D_info(const char* plik, int** tab, int n, int m) {
+    FILE* f = fopen(plik, "wb");
+    fwrite(&n, sizeof(int), 1, f);
+    fwrite(&m, sizeof(int), 1, f);
+    for (int i = 0; i < n; i++)
+        fwrite(tab[i], sizeof(int), m, f);
+    fclose(f);
+}
+
+Zad. 8.2.20 – Wczytaj tablicę 2D z pliku
+c
+Kopiuj
+Edytuj
+int** wczytaj2D_info(const char* plik, int* n, int* m) {
+    FILE* f = fopen(plik, "rb");
+    fread(n, sizeof(int), 1, f);
+    fread(m, sizeof(int), 1, f);
+    int** tab = malloc(*n * sizeof(int*));
+    for (int i = 0; i < *n; i++) {
+        tab[i] = malloc(*m * sizeof(int));
+        fread(tab[i], sizeof(int), *m, f);
+    }
+    fclose(f);
+    return tab;
+}

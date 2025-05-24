@@ -1,0 +1,297 @@
+#include <wchar.h>
+
+// 5.2.1 - Wyczyszczenie napisu (ustawienie pustego napisu)
+void wyczysc_char(char s[]) {
+    s[0] = '\0';
+}
+
+// 5.2.1 - Wyczyszczenie napisu szerokoznakowego
+void wyczysc_wchar(wchar_t s[]) {
+    s[0] = L'\0';
+}
+
+// 5.2.2 - Obliczanie długości napisu
+int dlugosc_char(const char s[]) {
+    int i = 0;
+    while (s[i] != '\0') i++;
+    return i;
+}
+
+// 5.2.2 - Obliczanie długości napisu szerokoznakowego
+int dlugosc_wchar(const wchar_t s[]) {
+    int i = 0;
+    while (s[i] != L'\0') i++;
+    return i;
+}
+
+// 5.2.3 - Porównanie dwóch napisów znak po znaku
+int porownaj_char(const char a[], const char b[]) {
+    for (int i = 0; a[i] || b[i]; i++) {
+        if (a[i] != b[i]) return 0;
+    }
+    return 1;
+}
+
+// 5.2.3 - Porównanie dwóch napisów szerokoznakowych
+int porownaj_wchar(const wchar_t a[], const wchar_t b[]) {
+    for (int i = 0; a[i] || b[i]; i++) {
+        if (a[i] != b[i]) return 0;
+    }
+    return 1;
+}
+
+// 5.2.4 - Sprawdzenie leksykograficznego porządku dwóch napisów
+int leksyko(const char a[], const char b[]) {
+    int i = 0;
+    while (a[i] && b[i]) {
+        if (a[i] < b[i]) return 1;
+        if (a[i] > b[i]) return 0;
+        i++;
+    }
+    return a[i] == '\0' && b[i] != '\0';
+}
+
+// 5.2.5 - Przepisanie jednego napisu do drugiego
+void przepisz_char(const char src[], char dest[]) {
+    int i = 0;
+    while (src[i]) {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
+}
+
+// 5.2.5 - Przepisanie napisu szerokoznakowego
+void przepisz_wchar(const wchar_t src[], wchar_t dest[]) {
+    int i = 0;
+    while (src[i]) {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = L'\0';
+}
+
+// 5.2.6 - Kopiowanie pierwszych n znaków napisu
+void kopiujn_char(const char src[], char dest[], int n) {
+    int i = 0;
+    while (i < n && src[i]) {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
+}
+
+// 5.2.6 - Kopiowanie pierwszych n znaków napisu szerokoznakowego
+void kopiujn_wchar(const wchar_t src[], wchar_t dest[], int n) {
+    int i = 0;
+    while (i < n && src[i]) {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = L'\0';
+}
+
+// 5.2.7 - Sklejanie dwóch napisów
+void sklej_char(const char a[], const char b[], char dest[]) {
+    int i = 0, j = 0;
+    while (a[i]) {
+        dest[j++] = a[i++];
+    }
+    i = 0;
+    while (b[i]) {
+        dest[j++] = b[i++];
+    }
+    dest[j] = '\0';
+}
+
+// 5.2.7 - Sklejanie dwóch napisów szerokoznakowych
+void sklej_wchar(const wchar_t a[], const wchar_t b[], wchar_t dest[]) {
+    int i = 0, j = 0;
+    while (a[i]) {
+        dest[j++] = a[i++];
+    }
+    i = 0;
+    while (b[i]) {
+        dest[j++] = b[i++];
+    }
+    dest[j] = L'\0';
+}
+
+// 5.2.8 - Zamiana małych liter na wielkie
+void na_duze(char s[]) {
+    for (int i = 0; s[i]; i++) {
+        if (s[i] >= 'a' && s[i] <= 'z') {
+            s[i] = s[i] - 'a' + 'A';
+        }
+    }
+}
+
+// 5.2.9 - Wycięcie fragmentu napisu od pozycji n do m
+void wytnij(char s[], int n, int m) {
+    int i, j = 0;
+    for (i = 0; s[i]; i++) {
+        if (i < n || i > m) {
+            s[j++] = s[i];
+        }
+    }
+    s[j] = '\0';
+}
+
+// 5.2.11 - Sprawdzenie czy napis zawiera dany znak
+int zawiera(const char s[], char c) {
+    for (int i = 0; s[i]; i++) {
+        if (s[i] == c) return 1;
+    }
+    return 0;
+}
+
+// 5.2.11 - Wycięcie wszystkich znaków z napisu s, które występują w masce
+void wytnijzw(char s[], const char maska[]) {
+    int i = 0, j = 0;
+    while (s[i]) {
+        if (!zawiera(maska, s[i])) s[j++] = s[i];
+        i++;
+    }
+    s[j] = '\0';
+}
+
+// 5.2.12 - Zostawienie w napisie tylko tych znaków, które występują w masce
+void wytnijzn(char s[], const char maska[]) {
+    int i = 0, j = 0;
+    while (s[i]) {
+        if (zawiera(maska, s[i])) s[j++] = s[i];
+        i++;
+    }
+    s[j] = '\0';
+}
+
+// 5.2.13 - Usunięcie z napisu s1 znaków na tych samych pozycjach, które pokrywają się z s2
+void wytnijtm(char s1[], const char s2[]) {
+    int i = 0, j = 0;
+    while (s1[i] && s2[i]) {
+        if (s1[i] != s2[i]) s1[j++] = s1[i];
+        i++;
+    }
+    while (s1[i]) s1[j++] = s1[i++];
+    s1[j] = '\0';
+}
+
+// 5.2.14 - Wczytaj napis typu char za pomocą fgets
+void wczytaj_char(char s[], int max) {
+    fgets(s, max, stdin);
+}
+
+// 5.2.15 - Wczytaj napis typu wchar_t za pomocą fgetws
+void wczytaj_wchar(wchar_t s[], int max) {
+    fgetws(s, max, stdin);
+}
+
+// 5.2.16 - Wypisz napis typu char
+void wypisz_char(const char s[]) {
+    puts(s);
+}
+
+// 5.2.17 - Wypisz napis typu wchar_t
+void wypisz_wchar(const wchar_t s[]) {
+    wprintf(L"%ls\n", s);
+}
+
+// 5.2.18 - Zwraca indeks najmniejszego leksykograficznie napisu w tablicy
+int najmniejszy_napis(const char tab[][100], int n) {
+    int min = 0;
+    for (int i = 1; i < n; i++) {
+        int j = 0;
+        while (tab[i][j] && tab[min][j] && tab[i][j] == tab[min][j]) j++;
+        if (tab[i][j] < tab[min][j]) min = i;
+    }
+    return min;
+}
+
+// 5.2.19 - Tworzy napis postaci "hh:mm:ss" z podanych godzin, minut i sekund
+void czas_napis(int h, int m, int s, char wynik[]) {
+    sprintf(wynik, "%02d:%02d:%02d", h, m, s);
+}
+
+// 5.2.20 - Skleja trzy napisy w jeden wynikowy
+void sklej3(const char a[], const char b[], const char c[], char wynik[]) {
+    int i = 0, j = 0;
+    while (a[i]) wynik[j++] = a[i++];
+    i = 0;
+    while (b[i]) wynik[j++] = b[i++];
+    i = 0;
+    while (c[i]) wynik[j++] = c[i++];
+    wynik[j] = '\0';
+}
+
+// 5.2.21 - Kopiuje napisy z tablicy źródłowej do nowej dynamicznie alokowanej tablicy
+char** kopiuj_napisy(const char* src[], int n) {
+    char** wynik = malloc(n * sizeof(char*));
+    for (int i = 0; i < n; i++) {
+        int len = 0;
+        while (src[i][len]) len++;
+        wynik[i] = malloc((len + 1) * sizeof(char));
+        for (int j = 0; j <= len; j++) {
+            wynik[i][j] = src[i][j];
+        }
+    }
+    return wynik;
+}
+
+// 5.2.22 - Zlicza liczbę wystąpień znaku c w napisie s
+int licz_znaki(const char s[], char c) {
+    int licznik = 0;
+    for (int i = 0; s[i]; i++) {
+        if (s[i] == c) licznik++;
+    }
+    return licznik;
+}
+
+// 5.2.23 - Sprawdza czy dwa napisy mają te same znaki niezależnie od kolejności
+int te_same_znaki(const char a[], const char b[]) {
+    int znaki_a[256] = {0};
+    int znaki_b[256] = {0};
+    for (int i = 0; a[i]; i++) znaki_a[(unsigned char)a[i]]++;
+    for (int i = 0; b[i]; i++) znaki_b[(unsigned char)b[i]]++;
+    for (int i = 0; i < 256; i++) {
+        if (znaki_a[i] != znaki_b[i]) return 0;
+    }
+    return 1;
+}
+
+// 5.2.24 - Zwraca długość najdłuższego wspólnego prefiksu dwóch napisów
+int wspolny_prefiks(const char a[], const char b[]) {
+    int i = 0;
+    while (a[i] && b[i] && a[i] == b[i]) i++;
+    return i;
+}
+
+// 5.2.25 - Sprawdza czy napis s zawiera napis w
+int zawiera_napis(const char s[], const char w[]) {
+    for (int i = 0; s[i]; i++) {
+        int j = 0;
+        while (s[i + j] && w[j] && s[i + j] == w[j]) j++;
+        if (!w[j]) return 1;
+    }
+    return 0;
+}
+
+// 5.2.26 - Zwraca indeks pierwszego wystąpienia napisu w w napisie s
+int indeks_napisu(const char s[], const char w[]) {
+    for (int i = 0; s[i]; i++) {
+        int j = 0;
+        while (s[i + j] && w[j] && s[i + j] == w[j]) j++;
+        if (!w[j]) return i;
+    }
+    return -1;
+}
+
+// 5.2.27 - Zwraca indeks ostatniego wystąpienia napisu w w napisie s
+int ostatni_indeks(const char s[], const char w[]) {
+    int ostatni = -1;
+    for (int i = 0; s[i]; i++) {
+        int j = 0;
+        while (s[i + j] && w[j] && s[i + j] == w[j]) j++;
+        if (!w[j]) ostatni = i;
+    }
+    return ostatni;
+}
